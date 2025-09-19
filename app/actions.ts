@@ -6,6 +6,8 @@ import { parseWithZod } from "@conform-to/zod";
 import { invoiceSchema, onboardingschema } from "./utils/zodSchema";
 import { prisma } from "./utils/db";
 import { redirect } from "next/navigation";
+import { emailClient } from "./utils/mailtrap";
+import { formatCurrency } from "./utils/formatCurrency";
 
 export async function onboardUser(prevState: any, formData: FormData) {
     const session = await requireUser();
@@ -79,6 +81,36 @@ export async function createInvoice(previousState: any, formData: FormData) {
             receipientName: submission.value.receipientName,
             receipientEmail: submission.value.receipientEmail,
             receipientAddress: submission.value.receipientAddress,
+        }
+    });
+
+    const sender = {
+        email: "hello@demomailtrap.co",
+        name: "FlowPay"
+    };
+
+    emailClient.send({
+        from: sender,
+        to: [{email: 'bonolodinkoa@gmail.com'}], //use this if we have a confirmed domain submission.value.receipientEmail
+        template_uuid: "1aeb4b05-be2a-4b15-8a0a-700e743127a2",
+        template_variables: {
+            clientName: submission.value.invoiceName,
+            receipientName: submission.value.receipientName,
+            senderName: submission.value.senderName,
+            invoiceNumber: submission.value.invoiceNumber,
+            invoiceDate: new Intl.DateTimeFormat('en-ZA', {
+                dateStyle: 'medium',
+            }).format(new Date(submission.value.issueDate)),
+            dueDate: new Intl.DateTimeFormat('en-ZA', {
+                dateStyle: 'medium',
+            }).format(new Date(submission.value.dueDate)),
+            totalAmount: formatCurrency(
+                submission.value.totalAmount,
+                submission.value.currency 
+            ),
+            status: submission.value.status,
+            notes: submission.value.notes!,
+            terms: submission.value.terms!
         }
     });
 

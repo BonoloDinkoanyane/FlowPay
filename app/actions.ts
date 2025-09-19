@@ -43,6 +43,11 @@ export async function createInvoice(previousState: any, formData: FormData) {
     //only authenticated users are allowed to create an invoice
     const session = await requireUser();
 
+    // Make sure we have a user; asserting that the user exists before using session.user.id.
+    if (!session.user || !session.user.id) {
+        throw new Error("User not found or not authenticated");
+    }
+
     const submission = parseWithZod(formData, {
         schema: invoiceSchema, 
     });
@@ -53,6 +58,9 @@ export async function createInvoice(previousState: any, formData: FormData) {
 
     const data = await prisma.invoice.create({
         data: {
+            //maps the userid
+            userId: session.user.id,
+
             invoiceName: submission.value.invoiceName,
             invoiceNumber: submission.value.invoiceNumber,
             currency: submission.value.currency,
@@ -73,4 +81,6 @@ export async function createInvoice(previousState: any, formData: FormData) {
             receipientAddress: submission.value.receipientAddress,
         }
     });
+
+    return redirect("/dashboard/invoices");
 }

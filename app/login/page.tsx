@@ -44,7 +44,8 @@ export default async function LoginPage() {
                             <Input name="email"
                              type="email" 
                              placeholder="example@example.com"
-                             required  />
+                             required  
+                            />
                     </div>
                     <SubmitButton text="Login"/>
                 </form>

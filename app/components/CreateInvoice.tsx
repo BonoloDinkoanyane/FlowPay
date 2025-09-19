@@ -1,5 +1,7 @@
 "use client";
-
+//fetching data in this component because the create page is a client component
+//so we dont want our secrets to be rendered on the front end
+//so we perform funtions in here, and call the function there
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -35,7 +37,11 @@ export function CreateInvoice() {
         shouldRevalidate: "onInput",
     });
 
-    const [selectedDate, setSelectedDate]= useState(new Date());
+    // Separate state for invoice and due date
+    const [invoiceDate, setInvoiceDate]= useState(new Date());
+    const [dueDate, setDueDate]= useState(new Date());
+    const [invoicePopoverOpen, setInvoicePopoverOpen] = useState(false);
+    const [duePopoverOpen, setDuePopoverOpen] = useState(false);
 
     //the updated values are now stored in the state 
     //and can be used to calculate the total
@@ -61,8 +67,20 @@ export function CreateInvoice() {
                     <Input 
                      type="hidden"
                      name = {fields.issueDate.name}
-                     value= {selectedDate.toISOString()}
-                      />
+                     value= {invoiceDate.toISOString()}
+                    />
+
+                    <Input 
+                     type="hidden"
+                     name = {fields.dueDate.name}
+                     value= {dueDate.toISOString()}
+                    />
+
+                    <Input 
+                     type="hidden"
+                     name={fields.totalAmount.name}
+                     value={calculateTotal}
+                     />
                     <div className="flex flex-col gap-1 w-fit mb-6">
                         <div className="flex items-center gap-4">
                             <Badge variant="secondary">draft</Badge>
@@ -80,7 +98,7 @@ export function CreateInvoice() {
                         <div>
                             <Label>Invoice No.</Label>
                             <div className="flex">
-                                <span className="px-3 border border-r-0 rounded-l-md">#</span>
+                                <span className=" flex items-center px-3 border border-r-0 rounded-l-md">#</span>
                                 <Input 
                                  name={fields.invoiceNumber.name}
                                  key={fields.invoiceNumber.key}
@@ -93,7 +111,7 @@ export function CreateInvoice() {
                         </div>
 
                         <div>
-                            <Label>Currrency</Label>
+                            <Label>Currency</Label>
                             <Select 
                              name= {fields.currency.name}
                              key= {fields.currency.key}
@@ -173,14 +191,14 @@ export function CreateInvoice() {
                             <div>
                             <Label>Invoice Date</Label>
                             </div>
-                            <Popover>
+                            <Popover open={invoicePopoverOpen} onOpenChange={setInvoicePopoverOpen}>
                                 <PopoverTrigger asChild>
                                     <Button variant="outline" className="w-[280px] text-left justify-start">
                                         <Calendar1Icon /> 
-                                        {selectedDate ? (
+                                        {invoiceDate ? (
                                             new Intl.DateTimeFormat("en-ZA", {
                                                 dateStyle: "long", 
-                                            }).format(selectedDate)
+                                            }).format(invoiceDate)
                                         ) : (
                                             <span>Pick a date</span>
                                         )}
@@ -189,8 +207,11 @@ export function CreateInvoice() {
                                 <PopoverContent>
                                     <Calendar 
                                     mode="single" 
-                                    selected={selectedDate}
-                                    onSelect={(date) => setSelectedDate(date || new Date())}
+                                    selected={invoiceDate}
+                                    onSelect={(date) => { 
+                                        setInvoiceDate(date || new Date());
+                                        setInvoicePopoverOpen(false);
+                                    }}
                                     disabled={{before: new Date()}}
                                     />
                                 </PopoverContent>
@@ -198,25 +219,39 @@ export function CreateInvoice() {
                             <p className="text-sm text-red-600">{fields.issueDate.errors}</p>
                         </div>
 
-                        <div className="w-[280px] text-left justify-start">
-                            <Label>Due Date</Label>
-                            <Select 
-                             name ={fields.dueDate.name}
-                             key = {fields.dueDate.key}
-                             defaultValue={fields.dueDate.initialValue}
-                             >
-                                <SelectTrigger>
-                                    <SelectValue placeholder="Select due date" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="1">1 Day</SelectItem>
-                                    <SelectItem value="7">7 Days</SelectItem>
-                                    <SelectItem value="14">14 Days</SelectItem>
-                                    <SelectItem value="30">30 Days</SelectItem>
-                                </SelectContent>
-                            </Select>
+                            <div>
+                                <div>
+                                    <Label>Due Date</Label>
+                                </div>
+                                <Popover open={duePopoverOpen} onOpenChange={setDuePopoverOpen}>
+                                <PopoverTrigger asChild>
+                                    <Button variant="outline" className="w-[280px] text-left justify-start">
+                                        <Calendar1Icon /> 
+                                        {dueDate ? (
+                                            new Intl.DateTimeFormat("en-ZA", {
+                                                dateStyle: "long", 
+                                            }).format(dueDate)
+                                        ) : (
+                                            <span>Pick a date</span>
+                                        )}
+                                    </Button>
+                                </PopoverTrigger>
+                                <PopoverContent>
+                                    <Calendar 
+                                    mode="single" 
+                                    selected={dueDate}
+                                    onSelect={(date) => {
+                                        setDueDate(date || new Date());
+                                        setDuePopoverOpen(false); // auto-close after selection
+                                    }}
+                                    disabled={{
+                                        before: invoiceDate || new Date(), // due date can't be before invoice date
+                                    }}
+                                    />
+                                </PopoverContent>
+                            </Popover>
                             <p className="text-sm text-red-600">{fields.dueDate.errors}</p>
-                        </div>
+                            </div>
                     </div>
 
                     <div>

@@ -91,7 +91,7 @@ export async function createInvoice(previousState: any, formData: FormData) {
 
     emailClient.send({
         from: sender,
-        to: [{email: 'bonolodinkoa@gmail.com'}], //use this if we have a confirmed domain submission.value.receipientEmail
+        to: [{email: 'bonolodinkoa@gmail.com'}], //use this -> if we have a confirmed domain submission.value.receipientEmail
         template_uuid: "1aeb4b05-be2a-4b15-8a0a-700e743127a2",
         template_variables: {
             clientName: submission.value.invoiceName,
@@ -110,8 +110,9 @@ export async function createInvoice(previousState: any, formData: FormData) {
             ),
             status: submission.value.status,
             notes: submission.value.notes!,
-            terms: submission.value.terms!
-        }
+            terms: submission.value.terms!,
+            invoiceLink: `http://localhost:3000/api/invoice/${data.id}`,
+        },
     });
 
     return redirect("/dashboard/invoices");

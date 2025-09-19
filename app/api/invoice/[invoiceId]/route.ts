@@ -2,6 +2,8 @@ import { prisma } from "@/app/utils/db";
 import { error } from "console";
 import { NextResponse } from "next/server";
 import jsPDF from "jspdf";
+import { formatCurrency } from "@/app/utils/formatCurrency";
+
 
 export async function GET(
     request: Request,
@@ -69,7 +71,7 @@ export async function GET(
 
     //invoice details
     pdf.setFontSize(10);
-    pdf.text(`Invoice Number: #${data.invoiceNumber}`, 120, 40);
+    pdf.text(`Invoice Number: #${data.invoiceNumber}`, 128, 40);
     pdf.text(`
         Date: ${new Intl.DateTimeFormat("en-ZA", {
             dateStyle: 'long',
@@ -77,6 +79,76 @@ export async function GET(
         120, 
         45,
     );
+    pdf.text(`
+        Due date: ${new Intl.DateTimeFormat('en-ZA',{
+            dateStyle:'long',
+        }).format(data.dueDate)}`,
+        120,
+        50
+    );
+
+    //item table header
+    pdf.setFontSize(10);
+    pdf.setFont('helvetica', 'bold');
+    pdf.text('Item', 20, 100);
+    pdf.text('Quantity', 100, 100);
+    pdf.text('Each', 130, 100);
+    pdf.text('Amount', 160, 100);
+
+    pdf.line(20, 102, 190, 102);
+
+    //item details
+    pdf.setFont('helvetica', 'normal');
+    pdf.text(data.item, 20, 110);
+    pdf.text(data.itemQuantity.toString(), 100, 110);
+    pdf.text(
+        formatCurrency(
+            data.itemPrice,
+            data.currency
+        ),
+        130,
+        110,
+    );
+    pdf.text(
+        formatCurrency(
+            data.totalAmount,
+            data.currency
+        ),
+        160,
+        110,
+    );
+
+    //totals section
+    pdf.line(20, 115, 190, 115);
+    pdf.setFont('helvetica');
+    pdf.text(`Total (${data.currency})`, 130, 130);
+    pdf.text(
+        formatCurrency(
+            data.totalAmount,
+            data.currency,
+        ),
+        160,
+        130,
+    );
+
+    //additional notes and terms section
+    if (data.notes){
+        pdf.setFont('helvetica');
+        pdf.setFontSize(10);
+        pdf.text("Notes", 20, 150);
+        pdf.text(data.notes, 20, 155);
+    };
+
+    if (data.terms){
+        pdf.setFont('helvetica');
+        pdf.setFontSize(10);
+        pdf.text("Notes", 20, 170);
+        pdf.text(data.terms, 20, 175);
+    };
+
+
+
+
 
     //generating pdf as buffer 
     //it convers the the jspdf into an array buffer; a low-level representation of binary data

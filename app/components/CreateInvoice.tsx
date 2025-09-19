@@ -21,7 +21,15 @@ import { invoiceSchema } from "../utils/zodSchema";
 import { formatCurrency } from "../utils/formatCurrency";
 import currencies from "@/data/currencies.json";
 
-export function CreateInvoice() {
+interface IAppProps{
+    firstName: string;
+    lastName: string;
+    addressLine1: string;
+    email: string;
+    businessName: string;
+}
+
+export function CreateInvoice({addressLine1, businessName, email, firstName, lastName}: IAppProps) {
 
     const [lastResult, action] = useActionState(createInvoice, undefined);
     const [form, fields] = useForm({
@@ -140,18 +148,23 @@ export function CreateInvoice() {
                                 <Input 
                                  name={fields.senderName.name}
                                  key={fields.senderName.key}
+                                 defaultValue={businessName?.trim() 
+                                    ? businessName 
+                                    : `${firstName ?? ""} ${lastName ?? ""}`.trim()}
                                  placeholder="Your Name, or Company Name" 
                                  />
                                  <p className="text-sm text-red-600">{fields.senderName.errors}</p>
                                 <Input 
                                  name= {fields.senderEmail.name}
                                  key= {fields.senderEmail.key}
+                                 defaultValue={email}
                                  placeholder="Your Email" 
                                  />
                                  <p className="text-sm text-red-600">{fields.senderEmail.errors}</p>
                                 <Input 
                                  name= {fields.senderAddress.name}
                                  key= {fields.senderAddress.key}
+                                 defaultValue={addressLine1}
                                  placeholder="Your Address" 
                                  />
                                  <p className="text-sm text-red-600">{fields.senderAddress.errors}</p>

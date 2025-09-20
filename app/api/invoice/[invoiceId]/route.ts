@@ -143,7 +143,7 @@ export async function GET(
         pdf.setFont('helvetica');
         pdf.setFontSize(10);
         pdf.text("Notes", 20, 170);
-        pdf.text(data.terms, 20, 175);
+        pdf.text(data.terms, 20, 175); 
     };
 
 

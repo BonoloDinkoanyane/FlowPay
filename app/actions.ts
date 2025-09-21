@@ -117,3 +117,75 @@ export async function createInvoice(previousState: any, formData: FormData) {
 
     return redirect("/dashboard/invoices");
 }
+
+export async function editInvoice(previousState: any, formData: FormData){
+    const session = await requireUser();
+
+    const submission = parseWithZod(formData, {
+        schema: invoiceSchema,
+    });
+
+    if (submission.status !== "success") {
+        return submission.reply();
+    }
+
+    const data = await prisma.invoice.update({
+        where: {
+            id: formData.get('id') as string,
+            userId: session.user?.id,
+        },
+        data: {
+            invoiceName: submission.value.invoiceName,
+            invoiceNumber: submission.value.invoiceNumber,
+            currency: submission.value.currency,
+            status: submission.value.status,
+            issueDate: submission.value.issueDate,
+            dueDate: submission.value.dueDate,
+            totalAmount: submission.value.totalAmount,
+            notes: submission.value.notes,
+            terms: submission.value.terms,
+            itemQuantity: submission.value.itemQuantity,
+            itemPrice: submission.value.itemPrice,
+            item: submission.value.item,
+            senderName: submission.value.senderName,
+            senderEmail: submission.value.senderEmail,
+            senderAddress: submission.value.senderAddress,
+            receipientName: submission.value.receipientName,
+            receipientEmail: submission.value.receipientEmail,
+            receipientAddress: submission.value.receipientAddress,
+        }
+    });
+
+    const sender = {
+        email: "hello@demomailtrap.co",
+        name: "FlowPay"
+    };
+
+    emailClient.send({
+        from: sender,
+        to: [{email: 'bonolodinkoa@gmail.com'}], //use this -> if we have a confirmed domain submission.value.receipientEmail
+        template_uuid: "94946ff9-f52c-4f55-80bf-576812b9e29b",
+        template_variables: {
+            clientName: submission.value.invoiceName,
+            receipientName: submission.value.receipientName,
+            senderName: submission.value.senderName,
+            invoiceNumber: submission.value.invoiceNumber,
+            invoiceDate: new Intl.DateTimeFormat('en-ZA', {
+                dateStyle: 'medium',
+            }).format(new Date(submission.value.issueDate)),
+            dueDate: new Intl.DateTimeFormat('en-ZA', {
+                dateStyle: 'medium',
+            }).format(new Date(submission.value.dueDate)),
+            totalAmount: formatCurrency(
+                submission.value.totalAmount,
+                submission.value.currency 
+            ),
+            status: submission.value.status,
+            notes: submission.value.notes!,
+            terms: submission.value.terms!,
+            invoiceLink: `http://localhost:3000/api/invoice/${data.id}`,
+        },
+    });
+
+    return redirect('/dashboard/invoices');
+}

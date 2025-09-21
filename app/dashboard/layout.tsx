@@ -10,6 +10,7 @@ import { Menu, User2 } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuRadioItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { prisma } from "../utils/db";
 import { redirect } from "next/navigation";
+import { Toaster } from "@/components/ui/sonner";
 
 async function getUser(userId: string) {
     const data = await prisma.user.findUnique ({
@@ -132,6 +133,7 @@ export default async function DashboardLayout({
                     </main>
                 </div>
             </div>
+            <Toaster richColors closeButton theme="light" />
         </>
     )
 }

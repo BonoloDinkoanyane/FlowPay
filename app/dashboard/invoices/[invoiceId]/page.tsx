@@ -1,3 +1,4 @@
+import { Editinvoice } from "@/app/components/EditInvoice";
 import { prisma } from "@/app/utils/db";
 import { requireUser } from "@/app/utils/hooks";
 import { notFound } from "next/navigation";
@@ -24,5 +25,11 @@ export default async function EditInvoicePage({ params }: {params: Params}){
     const {invoiceId} = await params;
     const session = await requireUser();
     const data = await getData(invoiceId, session.user?.id as string);
+
+    return(
+        <Editinvoice 
+         data= {data}
+        />
+    )
 
 }

@@ -150,7 +150,7 @@ export function CreateInvoice({addressLine1, businessName, email, firstName, las
                                  key={fields.senderName.key}
                                  defaultValue={businessName?.trim() 
                                     ? businessName 
-                                    : `${firstName ?? ""} ${lastName ?? ""}`.trim()}
+                                    : `${firstName ?? " "} ${lastName ?? ""}`.trim()}
                                  placeholder="Your Name, or Company Name" 
                                  />
                                  <p className="text-sm text-red-600">{fields.senderName.errors}</p>

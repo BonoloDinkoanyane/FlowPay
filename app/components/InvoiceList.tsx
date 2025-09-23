@@ -18,6 +18,7 @@ async function getData(userId: string){
             status: true,
             invoiceNumber: true,
             currency: true,
+            dueDate: true,
         }, 
         orderBy: {
             createdAt: 'desc'
@@ -54,8 +55,24 @@ export async function InvoiceList() {
                         )}
                     </TableCell>
                     <TableCell>
-                        <Badge>
+                       <Badge
+                        className={
+                            invoice.status === "PAID"
+                            ? "bg-green-600 text-white"
+                            : invoice.status === "OVERDUE" ||
+                                (invoice.dueDate && new Date(invoice.dueDate) < new Date())
+                            ? "bg-red-600 text-white"
+                            : invoice.status === "PENDING"
+                            ? "bg-yellow-400 text-black"
+                            : ""
+                        }
+                        variant="default"
+                        >
                             {invoice.status}
+                            {invoice.status !== "PAID" &&
+                                invoice.dueDate &&
+                                new Date(invoice.dueDate) < new Date() &&
+                                " - Overdue"}
                         </Badge>
                     </TableCell>
                     <TableCell>{new Intl.DateTimeFormat('en-ZA', {
@@ -65,6 +82,7 @@ export async function InvoiceList() {
                     </TableCell>
                     <TableCell className="text-right">
                         <InvoiceActions 
+                         status={invoice.status}
                          id={invoice.id}
                         />
                     </TableCell>

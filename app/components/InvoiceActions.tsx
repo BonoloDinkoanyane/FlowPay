@@ -8,9 +8,10 @@ import { toast } from "sonner";
 
 interface IAppProps{
     id: string,
+    status: string,
 }
 
-export function InvoiceActions({id}: IAppProps) {
+export function InvoiceActions({id, status}: IAppProps) {
 
     const handleSendReminder = () => {
         toast.promise(fetch(`/api/email/${id}`, {
@@ -34,17 +35,23 @@ export function InvoiceActions({id}: IAppProps) {
             </DropdownMenuTrigger>
 
             <DropdownMenuContent align="end">
-                <DropdownMenuItem asChild>
-                    <Link href="">
-                     <CheckCircle className="size-4 mr-2" /> Mark as Paid
-                    </Link>
-                </DropdownMenuItem>
+                {/* only renders the mark as paid if the invoice is not paid already */}
+                {status !== 'PAID' && (
+                    <DropdownMenuItem asChild>
+                        <Link href={`/dashboard/invoices/${id}/paid`}>
+                        <CheckCircle className="size-4 mr-2" /> Mark as Paid
+                        </Link>
+                    </DropdownMenuItem>
+                )}
 
-                <DropdownMenuItem asChild>
-                    <Link href={`/dashboard/invoices/${id}`}>
-                      <PencilIcon className="size-4 mr-2" /> Edit Invoice
-                    </Link>
-                </DropdownMenuItem>
+                {/* only renders the mark as edit invoice option if the invoice is not paid already */}
+                {status !== 'PAID' && (
+                    <DropdownMenuItem asChild>
+                        <Link href={`/dashboard/invoices/${id}`}>
+                        <PencilIcon className="size-4 mr-2" /> Edit Invoice
+                        </Link>
+                    </DropdownMenuItem>
+                )}
 
                 <DropdownMenuItem asChild>
                     <Link href={`/api/invoice/${id}`}
@@ -59,7 +66,7 @@ export function InvoiceActions({id}: IAppProps) {
                 </DropdownMenuItem>
 
                 <DropdownMenuItem asChild>
-                    <Link href="">
+                    <Link href={`/dashboard/invoices/${id}/delete`}>
                      <Trash className="size-4 mr-2" /> Delete Invoice
                     </Link>
                 </DropdownMenuItem>

@@ -6,12 +6,13 @@ import { NextRequest, NextResponse } from "next/server";
 //post request route handler 
 export async function POST(
   request: NextRequest,
-  context: { params: Promise<{ invoiceId: string }> } // <-- must match expected type
+  context: { params: Promise<any> } // keep generic here
 ) {
   try {
     const session = await requireUser();
 
-    const { invoiceId } = await context.params; // await the params promise
+    // safely extract invoiceId
+    const { invoiceId } = await context.params;
 
     const invoiceData = await prisma.invoice.findUnique({
       where: {

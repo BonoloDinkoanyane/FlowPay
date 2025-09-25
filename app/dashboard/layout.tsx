@@ -55,7 +55,11 @@ export default async function DashboardLayout({
                         <div className="h-14 flex items-center border-b px-4 lg:h-[60px]
                             lg:px-6">
                             <Link href="/" className="flex items-center gap-2">
-                            <Image src={Flowpay} alt="Logo" className="size-7" />
+                            <Image 
+                             src={Flowpay} 
+                             alt="Logo" 
+                             className="size-7 rounded-4xl"
+                            />
                             <p className="font-bold text-2xl">
                                 Flow<span className="text-blue-600">Pay</span>
                             </p>

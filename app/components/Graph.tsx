@@ -15,7 +15,7 @@ export function Graph({data}: iAppProps){
         <ChartContainer 
             config={{
                 amount:{
-                    label: 'Amount',
+                    label: 'Amount: ',
                     color: 'hsl(var(--primary))',
                 },
             }}
@@ -34,7 +34,7 @@ export function Graph({data}: iAppProps){
                     <Line
                      type='monotone'
                      dataKey='amount'
-                     stroke="var(--color-amount)"
+                     stroke="#000"
                      strokeWidth={2}
                      connectNulls
                     />

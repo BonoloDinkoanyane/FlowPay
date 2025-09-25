@@ -4,17 +4,15 @@ import { emailClient } from "@/app/utils/mailtrap";
 import { NextRequest, NextResponse } from "next/server";
 
 //post request route handler 
-// POST request route handler
 export async function POST(
   request: NextRequest,
-  { params }: { params: { invoiceId: string } } // directly use object, no Promise
+  context: { params: Promise<{ invoiceId: string }> } // <-- must match expected type
 ) {
   try {
     const session = await requireUser();
 
-    const { invoiceId } = params; // directly extract invoiceId
+    const { invoiceId } = await context.params; // await the params promise
 
-    // fetch invoice by id and userId
     const invoiceData = await prisma.invoice.findUnique({
       where: {
         id: invoiceId,
@@ -26,14 +24,11 @@ export async function POST(
       return NextResponse.json({ error: "Invoice not found" }, { status: 404 });
     }
 
-    const sender = {
-      email: "hello@demomailtrap.co",
-      name: "FlowPay",
-    };
+    const sender = { email: "hello@demomailtrap.co", name: "FlowPay" };
 
     await emailClient.send({
       from: sender,
-      to: [{ email: "bonolodinkoa@gmail.com" }], // replace with actual recipient when available
+      to: [{ email: "bonolodinkoa@gmail.com" }],
       template_uuid: "b1568b77-68e1-4e43-9bba-aea8c3eba0eb",
       template_variables: {
         company_info_name: invoiceData.senderName,

@@ -56,24 +56,15 @@ FlowPay is a modern, full-stack invoicing application designed to simplify the w
 
 
 # Implementation Details
-	•	Data aggregation:
-Invoices are grouped and aggregated by date using reduce(), then transformed into a sorted array for charting.
-	•	Graph visualization:
-Uses recharts to render a line graph of invoice totals over time.
-	•	Currency handling:
-	•	Each invoice stores totalAmount and currency.
+	•	Data aggregation: Invoices are grouped and aggregated by date using reduce(), then transformed into a sorted array for charting.
+	•	Graph visualisation: Uses recharts to render a line graph of invoice totals over time.
+	•	Currency handling: Each invoice stores totalAmount and currency.
 	•	Totals are displayed natively in the chosen invoice currency.
-	•	Dashboard totals (last 30 days) are displayed in a single base currency (e.g., ZAR).
-	•	Recent invoices:
-	•	Displays last 8 invoices with recipient initials as avatar fallback.
-	•	Email + amount shown in a clean, responsive flex layout.
-	•	Suspense integration:
-	•	Each major dashboard section (DashboardBlocks, InvoiceGraph, RecentInvoices) wrapped in its own <Suspense> for independent loading.
+	•	Dashboard totals (last 30 days) are displayed in a single base currency (ZAR).
+	•	Recent invoices: Displays last 8 invoices with recipient initials as avatar fallback. Email + amount shown in a clean, responsive flex layout.
+	•	Suspense integration: Each major dashboard section (DashboardBlocks, InvoiceGraph, RecentInvoices) wrapped in its own <Suspense> for independent loading.
 
-
-# Current State of Development
-
-Implemented:
+# Implemented:
 	•	Invoice data model with Prisma
 	•	Paid invoices aggregation for graphs
 	•	Recent invoices list with avatars
@@ -83,7 +74,7 @@ Implemented:
 	•	Modern UI components
 	•	Export invoices as PDF
 
-Next Steps / Possible Enhancements:
+# Next Steps / Possible Enhancements:
 	•	Client management module
 	•	Payment integrations
 	•	Multi-user team accounts

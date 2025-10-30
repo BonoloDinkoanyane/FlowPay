@@ -39,22 +39,6 @@ FlowPay is a modern, full-stack invoicing application designed to simplify the w
 	•	Deployment: Cloud-ready (can be hosted on Vercel, Railway, or similar)
 
 
-# Project Structure
-
-/app
-  /dashboard
-    DashboardPage.tsx   → Main dashboard entry
-    InvoiceGraph.tsx    → Paid invoices line graph
-    RecentInvoices.tsx  → Recent invoices list
-  /utils
-    db.ts               → Prisma client instance
-    hooks.ts            → Auth/session helpers
-    formatCurrency.ts   → Currency formatting logic
-  /components
-    ui/                 → shadcn/ui primitives (Card, Avatar, Skeleton, etc.)
-
-
-
 # Implementation Details
 	•	Data aggregation: Invoices are grouped and aggregated by date using reduce(), then transformed into a sorted array for charting.
 	•	Graph visualisation: Uses recharts to render a line graph of invoice totals over time.

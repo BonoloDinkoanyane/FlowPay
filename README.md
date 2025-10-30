@@ -4,7 +4,7 @@ FlowPay is a modern, full-stack invoicing application designed to simplify the w
 
 ## Features
 
-# Authentication & Authorization
+# Authentication & Authorisation
 	•	User sessions handled with requireUser() ensuring secure, authenticated access.
 	•	Protected routes for dashboard and invoice management.
 
@@ -39,7 +39,7 @@ FlowPay is a modern, full-stack invoicing application designed to simplify the w
 	•	Deployment: Cloud-ready (can be hosted on Vercel, Railway, or similar)
 
 
-📂 Project Structure
+# Project Structure
 
 /app
   /dashboard
@@ -70,9 +70,8 @@ Uses recharts to render a line graph of invoice totals over time.
 	•	Suspense integration:
 	•	Each major dashboard section (DashboardBlocks, InvoiceGraph, RecentInvoices) wrapped in its own <Suspense> for independent loading.
 
-⸻
 
-📈 Current State of Development
+# Current State of Development
 
 Implemented:
 	•	Invoice data model with Prisma
@@ -82,21 +81,11 @@ Implemented:
 	•	Dashboard analytics (last 30 days totals)
 	•	Suspense loading states
 	•	Modern UI components
-
-🛠️ Next Steps / Possible Enhancements:
-	•	Invoice creation & editing UI
-	•	Client management module
-	•	Payment integrations (Stripe, PayPal)
 	•	Export invoices as PDF
+
+Next Steps / Possible Enhancements:
+	•	Client management module
+	•	Payment integrations
 	•	Multi-user team accounts
 	•	Advanced analytics (monthly revenue, outstanding invoices, trends)
 
-⸻
-
-💡 Tagline
-
-FlowPay – The easiest way to create, send, and track invoices. Get paid faster, stay organized.
-
-⸻
-
-Would you like me to also write a shorter, polished “About” section for GitHub (2–3 sentences max) that you can use at the very top of the README before all this detail? That way you’ll have both a quick intro and this comprehensive breakdown.

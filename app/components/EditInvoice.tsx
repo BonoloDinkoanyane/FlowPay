@@ -18,8 +18,9 @@ import { useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod";
 import { invoiceSchema } from "../utils/zodSchema";
 import currencies from "@/data/currencies.json";
-import { Prisma } from "../../lib/generated/prisma";
+import { prisma } from "../utils/db";
 import {  editInvoice } from "../actions";
+import { Prisma } from "@prisma/client";
 
 interface IAppProps{
 

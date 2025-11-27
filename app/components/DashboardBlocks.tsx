@@ -4,6 +4,13 @@ import { prisma } from "../utils/db";
 import { requireUser } from "../utils/hooks";
 import { formatCurrency } from "../utils/formatCurrency";
 
+
+type Invoice = {
+  totalAmount: number;
+  currency: string;
+  createdAt: Date;
+};
+
 async function getData(userId: string){
     const [data, openinvoices, paidInvoices] = await Promise.all([
         prisma.invoice.findMany({
@@ -37,9 +44,9 @@ async function getData(userId: string){
     ]);
 
     return {
-        data, 
-        openinvoices, 
-        paidInvoices
+       data: data as Invoice[], // <-- assert the type
+        openinvoices,
+        paidInvoices,
     }
 }
 
@@ -47,6 +54,14 @@ export default async function DashboardBlocks(){
 
     const session = await requireUser();
     const {data, openinvoices, paidInvoices} = await getData(session.user?.id as string);
+    const totalRevenue = data
+        .filter((invoice: Invoice) => {
+            const thirtyDaysAgo = new Date();
+            thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+            return new Date(invoice.createdAt) >= thirtyDaysAgo;
+    })
+    .reduce((acc: number, invoice: Invoice) => acc + invoice.totalAmount, 0);
+    
     return(
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 md:gap-8">
             <Card>
@@ -58,16 +73,7 @@ export default async function DashboardBlocks(){
                 </CardHeader>
                 <CardContent>
                     <h2 className="text-2xl font-bold">
-                        {formatCurrency(
-                            data
-                               .filter((invoice: { totalAmount: number; currency: string; createdAt: Date }) => {
-                                    const thirtyDaysAgo = new Date();
-                                    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-                                    return new Date(invoice.createdAt) >= thirtyDaysAgo;
-                            })
-                            .reduce((acc, invoice) => acc + invoice.totalAmount, 0),
-                            "ZAR"
-                        )}
+                        {formatCurrency(totalRevenue, "ZAR")}
                     </h2>
                     <p className="text-xs text-muted-foreground">
                         The total value of issued invoices in the last 30 days

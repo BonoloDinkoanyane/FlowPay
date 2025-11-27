@@ -60,12 +60,12 @@ export default async function DashboardBlocks(){
                     <h2 className="text-2xl font-bold">
                         {formatCurrency(
                             data
-                                .filter(invoice => {
-                                const thirtyDaysAgo = new Date();
-                                thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-                                return new Date(invoice.createdAt) >= thirtyDaysAgo;
-                                })
-                                .reduce((acc, invoice) => acc + invoice.totalAmount, 0),
+                               .filter((invoice: { totalAmount: number; currency: string; createdAt: Date }) => {
+                                    const thirtyDaysAgo = new Date();
+                                    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+                                    return new Date(invoice.createdAt) >= thirtyDaysAgo;
+                            })
+                            .reduce((acc, invoice) => acc + invoice.totalAmount, 0),
                             "ZAR"
                         )}
                     </h2>

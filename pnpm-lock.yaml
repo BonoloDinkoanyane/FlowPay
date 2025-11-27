@@ -9,19 +9,19 @@ importers:
   .:
     dependencies:
       '@auth/core':
-        specifier: 0.40.0
+        specifier: ^0.40.0
         version: 0.40.0(nodemailer@7.0.6)
       '@auth/prisma-adapter':
-        specifier: 2.10.0
+        specifier: ^2.10.0
         version: 2.10.0(@prisma/client@6.16.1(prisma@6.16.1(typescript@5.9.2))(typescript@5.9.2))(nodemailer@7.0.6)
       '@conform-to/react':
-        specifier: 1.10.0
+        specifier: ^1.10.0
         version: 1.10.0(react@19.1.0)
       '@conform-to/zod':
-        specifier: 1.10.0
+        specifier: ^1.10.0
         version: 1.10.0(zod@3.25.76)
       '@prisma/client':
-        specifier: 6.16.1
+        specifier: ^6.16.1
         version: 6.16.1(prisma@6.16.1(typescript@5.9.2))(typescript@5.9.2)
       '@radix-ui/react-avatar':
         specifier: ^1.1.10
@@ -75,16 +75,16 @@ importers:
         specifier: ^7.0.6
         version: 7.0.6
       react:
-        specifier: 19.1.0
+        specifier: ^19.1.0
         version: 19.1.0
       react-day-picker:
         specifier: ^9.10.0
         version: 9.10.0(react@19.1.0)
       react-dom:
-        specifier: 19.1.0
+        specifier: ^19.1.0
         version: 19.1.0(react@19.1.0)
       recharts:
-        specifier: 2.15.4
+        specifier: ^2.15.4
         version: 2.15.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       sonner:
         specifier: ^2.0.7
@@ -93,7 +93,7 @@ importers:
         specifier: ^3.3.1
         version: 3.3.1
       zod:
-        specifier: 3.25.76
+        specifier: ^3.25.76
         version: 3.25.76
     devDependencies:
       '@eslint/eslintrc':
@@ -1712,6 +1712,7 @@ packages:
   fast-equals@5.3.0:
     resolution: {integrity: sha512-xwP+dG/in/nJelMOUEQBiIYeOoHKihWPB2sNZ8ZeDbZFoGb1OwTGMggGRgg6CRitNx7kmHgtIz2dOHDQ8Ap7Bw==}
     engines: {node: '>=6.0.0'}
+    deprecated: Please upgrade to `5.3.1`; this version incorrectly installs the internal `.yarn` package, which balloons installation size, and can cause errors with pnpm installs.
 
   fast-glob@3.3.1:
     resolution: {integrity: sha512-kNFPyjhh5cKjrUltxs+wFx+ZkbRaxxmZ+X0ZU31SOsxCEtP9VPgtq2teZw1DebupL5GmDaNQ6yKMMVcM41iqDg==}
